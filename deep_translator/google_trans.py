@@ -19,7 +19,7 @@ class GoogleTranslator(BaseTranslator):
     _languages = GOOGLE_LANGUAGES_TO_CODES
     supported_languages = list(_languages.keys())
 
-    def __init__(self, source="auto", target="en"):
+    def __init__(self, source="auto", target="en", proxies={}):
         """
         @param source: source language to translate from
         @param target: target language to translate to
@@ -36,7 +36,8 @@ class GoogleTranslator(BaseTranslator):
                                                element_query={"class": "t0"},
                                                payload_key='q',  # key of text in the url
                                                hl=self._target,
-                                               sl=self._source)
+                                               sl=self._source,
+                                               proxies=proxies)
 
         self._alt_element_query = {"class": "result-container"}
 
@@ -89,7 +90,7 @@ class GoogleTranslator(BaseTranslator):
                 self._url_params[self.payload_key] = text
 
             response = requests.get(self.__base_url,
-                                    params=self._url_params, headers ={'User-agent': 'your bot 0.1'})
+                                    params=self._url_params, headers ={'User-agent': 'your bot 0.1'}, proxies=self.proxies)
 
             if response.status_code == 429:
                 raise TooManyRequests()

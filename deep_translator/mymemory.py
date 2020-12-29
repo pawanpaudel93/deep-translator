@@ -22,7 +22,7 @@ class MyMemoryTranslator(BaseTranslator):
     _languages = GOOGLE_LANGUAGES_TO_CODES
     supported_languages = list(_languages.keys())
 
-    def __init__(self, source="auto", target="en", **kwargs):
+    def __init__(self, source="auto", target="en", proxies={}, **kwargs):
         """
         @param source: source language to translate from
         @param target: target language to translate to
@@ -37,7 +37,8 @@ class MyMemoryTranslator(BaseTranslator):
                                                  source=self._source,
                                                  target=self._target,
                                                  payload_key='q',
-                                                 langpair='{}|{}'.format(self._source, self._target))
+                                                 langpair='{}|{}'.format(self._source, self._target),
+                                                 proxies=proxies)
 
     @staticmethod
     def get_supported_languages(as_dict=False):
@@ -93,7 +94,8 @@ class MyMemoryTranslator(BaseTranslator):
 
             response = requests.get(self.__base_url,
                                     params=self._url_params,
-                                    headers=self.headers)
+                                    headers=self.headers,
+                                    proxies=self.proxies)
 
             if response.status_code == 429:
                 raise TooManyRequests()

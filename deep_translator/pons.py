@@ -21,7 +21,7 @@ class PonsTranslator(BaseTranslator):
     _languages = PONS_LANGUAGES_TO_CODES
     supported_languages = list(_languages.keys())
 
-    def __init__(self, source, target="english"):
+    def __init__(self, source, target="english", proxies={}):
         """
         @param source: source language to translate from
         @param target: target language to translate to
@@ -36,7 +36,8 @@ class PonsTranslator(BaseTranslator):
                          target=self._target,
                          payload_key=None,
                          element_tag='div',
-                         element_query={"class": "target"}
+                         element_query={"class": "target"},
+                         proxies=proxies
                          )
 
     @staticmethod
@@ -86,7 +87,7 @@ class PonsTranslator(BaseTranslator):
         if self._validate_payload(word, max_chars=50):
             url = "{}{}-{}/{}".format(self.__base_url, self._source, self._target, word)
             url = requote_uri(url)
-            response = requests.get(url)
+            response = requests.get(url, proxies=self.proxies)
 
             if response.status_code == 429:
                 raise TooManyRequests()

@@ -22,7 +22,7 @@ class LingueeTranslator(BaseTranslator):
     _languages = LINGUEE_LANGUAGES_TO_CODES
     supported_languages = list(_languages.keys())
 
-    def __init__(self, source, target="en"):
+    def __init__(self, source, target="en", proxies={}):
         """
         @param source: source language to translate from
         @param target: target language to translate to
@@ -38,6 +38,7 @@ class LingueeTranslator(BaseTranslator):
                          element_tag='a',
                          element_query={'class': 'dictLink featured'},
                          payload_key=None,  # key of text in the url
+                         proxies=proxies
                         )
 
     @staticmethod
@@ -88,7 +89,7 @@ class LingueeTranslator(BaseTranslator):
             # %s-%s/translation/%s.html
             url = "{}{}-{}/translation/{}.html".format(self.__base_url, self._source, self._target, word)
             url = requote_uri(url)
-            response = requests.get(url)
+            response = requests.get(url, proxies=self.proxies)
 
             if response.status_code == 429:
                 raise TooManyRequests()
@@ -125,6 +126,6 @@ class LingueeTranslator(BaseTranslator):
 
         translated_words = []
         for word in words:
-            translated_words.append(self.translate(payload=word))
+            translated_words.append(self.translate(word=word))
         return translated_words
 

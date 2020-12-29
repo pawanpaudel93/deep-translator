@@ -15,6 +15,7 @@ class BaseTranslator(ABC):
                  payload_key=None,
                  element_tag=None,
                  element_query=None,
+                 proxies={},
                  **url_params):
         """
         @param source: source language to translate from
@@ -30,7 +31,7 @@ class BaseTranslator(ABC):
         self.headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) '
                                       'AppleWebit/535.19'
                                       '(KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19'}
-        self.proxies = {}
+        self.proxies = proxies
         super(BaseTranslator, self).__init__()
 
     @staticmethod

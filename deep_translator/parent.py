@@ -9,14 +9,15 @@ class BaseTranslator(ABC):
     Abstract class that serve as a parent translator for other different translators
     """
     def __init__(self,
-                 base_url=None,
-                 source="auto",
-                 target="en",
-                 payload_key=None,
-                 element_tag=None,
-                 element_query=None,
-                 proxies={},
-                 **url_params):
+                timeout,
+                base_url=None,
+                source="auto",
+                target="en",
+                payload_key=None,
+                element_tag=None,
+                element_query=None,
+                proxies={},
+                **url_params):
         """
         @param source: source language to translate from
         @param target: target language to translate to
@@ -32,6 +33,7 @@ class BaseTranslator(ABC):
                                       'AppleWebit/535.19'
                                       '(KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19'}
         self.proxies = proxies
+        self.timeout = timeout
         super(BaseTranslator, self).__init__()
 
     @staticmethod
